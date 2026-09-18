@@ -43,7 +43,8 @@ The example broker `192.0.2.20` is a documentation-only address; replace it with
 | Phone enrollment | Documented manual procedure |
 | Fleet settings diff/apply | Available with preview by default and stored-settings readback; [fleet guide](docs/fleet.md) |
 | Walk capture, scoring and coverage survey | Available with explicit missing-data and capture-completeness reporting; [calibration guide](docs/calibration.md) |
-| Home Assistant pet-safety package | In development under [spec 002](specs/002-pet-safety/spec.md); no safety guarantee from presence alone |
+| Pet advisory model and offline replay | Available for synthetic scenarios; [guide](docs/pet-safety.md) |
+| Home Assistant pet-safety package | Adapter/package in development under [spec 002](specs/002-pet-safety/spec.md); no safety guarantee from presence alone |
 
 ## Keep your home private
 

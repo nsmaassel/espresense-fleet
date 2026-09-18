@@ -1,0 +1,17 @@
+{"schema":1,"kind":"transport","elapsed_s":0,"connected":true}
+{"schema":1,"kind":"observation","elapsed_s":1,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":10,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":20,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":31,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"door_open","elapsed_s":32,"door":"entry"}
+{"schema":1,"kind":"camera","elapsed_s":33,"door":"entry","zone":"inside","event_id":"fictional-event","evidence_at_s":33}
+{"schema":1,"kind":"acknowledge","elapsed_s":34}
+{"schema":1,"kind":"restart","elapsed_s":35}
+{"schema":1,"kind":"transport","elapsed_s":40,"connected":true}
+{"schema":1,"kind":"observation","elapsed_s":41,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":51,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":61,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":71,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":81,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":91,"node":"node_a","distance_m":1,"rssi_dbm":-60}
+{"schema":1,"kind":"observation","elapsed_s":101,"node":"node_a","distance_m":1,"rssi_dbm":-60}

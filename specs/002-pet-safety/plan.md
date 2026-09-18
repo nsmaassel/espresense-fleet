@@ -59,3 +59,15 @@ review. This first delivery establishes inputs and the complete feature plan. Do
 engine/replay and HA runtime/package delivery remain separate work. A local WSL
 Python 3.14.2 / HA 2026.9.2 runtime initializes successfully in disposable storage;
 that is test-harness evidence, not validation of the unfinished integration.
+
+
+### Domain/replay delivery evidence
+
+Independent five-axis review found a P2 room-debounce bypass: retained room history
+could become current room after one report following a gap/reconnect. The fix separates
+current qualification from retained history. Four regressions reproduced the original
+failures and now pass; the reviewer independently verified all 47 pet tests with no
+remaining required findings. CLI replay includes latch, acknowledgement, restart,
+missing freshness and eventual stable recovery. Input filtering uses the same camera-ID
+contract as the engine. These prove software behavior only; HA adapter/package/runtime
+and physical acceptance remain outstanding. Principles I–VII remain satisfied.
