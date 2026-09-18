@@ -5,6 +5,44 @@ on:
 permissions:
   contents: read
 jobs:
+  spec-kit-scripts:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Spec Kit scripts in an isolated worktree
+        shell: pwsh
+        run: pwsh -NoProfile -File tests/test_specify_scripts.ps1
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements.txt
+      - name: Install pinned Gitleaks binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/gitleaks.tar.gz"
+          curl --fail --silent --show-error --location \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.0/gitleaks_8.30.0_linux_x64.tar.gz \
+            --output "$archive"
+          echo "79a3ab579b53f71efd634f3aaf7e04a0fa0cf206b7ed434638d1547a2470a66e  $archive" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/gitleaks-bin"
+          tar -xzf "$archive" -C "$RUNNER_TEMP/gitleaks-bin" gitleaks
+          echo "$RUNNER_TEMP/gitleaks-bin" >> "$GITHUB_PATH"
+      - name: Verify policy and secret scanner rejection cases
+        run: python -m unittest discover -s tests -p test_governance.py -v
+        env:
+          GITLEAKS_EXECUTABLE: gitleaks
+      - run: python tooling/governance/check_repository.py
+      - name: Scan checkout and complete reachable history
+        run: |
+          gitleaks dir . --config .gitleaks.toml --redact=100 --no-banner
+          gitleaks git . --config .gitleaks.toml --redact=100 --no-banner --log-opts="--all"
   python:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,11 @@
+title = "ESPresense public repository secrets"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "bluetooth-identity-resolving-key"
+description = "Bluetooth IRK assignment or ESPresense irk device ID"
+regex = '''(?i)\birk["']?\s*[:=]\s*["']?([0-9a-f]{32})\b'''
+secretGroup = 1
+keywords = ["irk"]
