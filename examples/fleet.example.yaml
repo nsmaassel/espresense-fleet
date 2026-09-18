@@ -1,0 +1,27 @@
+# Fictional documentation example; copy outside the public repository and replace
+# addresses with the operator's confirmed inventory before using it.
+site: example-fictional
+broker:
+  host: broker.example
+  port: 1883
+defaults:
+  hardware:
+    led_1_type: "2" # Firmware dropdowns are strings, even for numeric options.
+    led_1_pin: 35
+    led_1_cnt: 1
+    led_1_cntrl: "1"
+nodes:
+  - id: study-node
+    address: study-node.example
+    room: study
+    target: esp32s3-cdc
+    mac: null
+  - id: hall-node
+    address: hall-node.example
+    room: hall
+    settings:
+      main:
+        mqtt_port: 1884 # Explicit per-node broker exception.
+  - id: spare-node
+    address: null # Not provisioned; reported separately as skipped.
+    room: null

@@ -3,7 +3,8 @@
 Recovered from the approved September 17 setup session. The user selected a public
 `espresense-fleet` repository, reusable onboarding/tools, an offline layout editor,
 and household configuration in a separate private repository. This delivery completes US1/US2 tooling;
-US3–US6 remain future work rather than implied live features.
+US3 is delivered separately by [spec 004](../004-fleet-reconcile/plan.md).
+US4–US6 remain future work rather than implied live features.
 
 ## Constitution Check
 
