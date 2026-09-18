@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "pet_id": "example_pet",
+  "name": "Example Pet",
+  "device_alias": "example-collar",
+  "nodes": {
+    "node_a": {"mqtt_room": "example-a", "room": "room_a"},
+    "node_b": {"mqtt_room": "example-b", "room": "room_b"}
+  },
+  "doors": {
+    "entry": {
+      "contact": "binary_sensor.example_entry",
+      "nodes": ["node_a"],
+      "exterior": true,
+      "near_rssi_dbm": -65,
+      "camera": "example-camera",
+      "inside_zones": ["threshold"],
+      "outside_zones": ["walkway"]
+    },
+    "internal": {
+      "contact": "binary_sensor.example_internal",
+      "nodes": ["node_b"],
+      "exterior": false,
+      "near_rssi_dbm": -65
+    }
+  },
+  "timing": {
+    "observation_fresh_s": 20,
+    "room_hold_s": 30,
+    "last_room_retention_s": 600,
+    "indoor_recent_s": 900,
+    "correlation_s": 180,
+    "stable_clear_s": 60,
+    "urgent_silence_s": 180,
+    "health_silence_s": 1800,
+    "heads_up_cooldown_s": 60
+  },
+  "frigate_topic": "frigate/events"
+}
