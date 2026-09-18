@@ -26,6 +26,6 @@ These require expanded requirements and a reviewed plan before implementation.
 - [x] T011 US3: fleet diff/apply with explicit desired config; implemented and validated under [spec 004](../004-fleet-reconcile/tasks.md).
 - [x] T012 US4: record and score calibration walks; software delivered under [spec 005](../005-calibration-evidence/tasks.md), physical walk remains pending.
 - [x] T013 US5: coverage survey diagnostics; software delivered under [spec 005](../005-calibration-evidence/tasks.md), physical placement remains pending.
-- [ ] T014 US6: separate pet-safety spec and Home Assistant package.
+- [x] T014 US6: pet advisory integration and Home Assistant package delivered under [spec 002](../002-pet-safety/tasks.md); physical validation and activation remain pending.
 
 Physical acceptance is tracked in [issue #7](https://github.com/nsmaassel/espresense-fleet/issues/7); private deployment records stay outside this repository.

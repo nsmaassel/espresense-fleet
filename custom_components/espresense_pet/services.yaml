@@ -1,0 +1,4 @@
+acknowledge:
+  name: Acknowledge pet advisory
+  description: Mark the current incident seen. This does not clear the latch or assert the animal has returned.
+  fields: {}

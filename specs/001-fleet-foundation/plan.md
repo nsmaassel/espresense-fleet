@@ -5,7 +5,8 @@ Recovered from the approved September 17 setup session. The user selected a publ
 and household configuration in a separate private repository. This delivery completes US1/US2 tooling;
 US3 is delivered separately by [spec 004](../004-fleet-reconcile/plan.md).
 US4/US5 software is delivered by [spec 005](../005-calibration-evidence/plan.md).
-US6 and physical validation remain future work.
+US6 software is delivered by [spec 002](../002-pet-safety/plan.md).
+Physical validation and live activation remain future work.
 
 ## Constitution Check
 
@@ -19,7 +20,7 @@ current design review, not a claim that the original scaffold ran the CLI gates.
 | III. Configuration as code | Pinned firmware; geometry is the layout source; FR-002, FR-006. | Foundation covered; fleet reconciliation is implemented in spec 004. |
 | IV. Public/private separation | Fictional examples and external config paths; FR-003. | Reviewed; deployment records stay private. |
 | V. Recorded evidence | Offline and browser tests below; physical calibration needs site records. | Software verified; site validation pending. |
-| VI. Scope | US1/US2 deliver flashing, provisioning and layout only. | In scope; future stories remain unchecked. |
+| VI. Scope | US1/US2 deliver flashing, provisioning and layout; specs 004, 005 and 002 deliver the follow-on software. | In scope; physical acceptance remains unchecked. |
 | VII. Accuracy honesty | No universal BLE accuracy guarantee; measure after mounting. | Preserved. |
 
 Recheck these entries after design changes and before implementation review. A
@@ -53,5 +54,5 @@ prove a successful flash or usable Wi-Fi coverage.
 2. Flash/provision one at a time; verify fresh status/telemetry, then mount.
 3. Establish sufficient usable node coverage on both floors, run Companion, and
    measure room transitions with the enrolled phone.
-4. Calibrate the collar beacon when available. Specify door/contact/camera fusion
-   separately before building or enabling pet alerts.
+4. Calibrate the collar beacon when available. Follow the private mapping and
+   supervised activation checklist in `docs/pet-safety.md` before enabling advisories.

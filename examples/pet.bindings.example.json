@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "notifications": {
+    "heads_up": "script.example_pet_heads_up",
+    "suspected": "script.example_pet_suspected",
+    "urgent": "script.example_pet_urgent",
+    "health": "script.example_pet_health",
+    "recovered": "script.example_pet_recovered"
+  },
+  "lights": {
+    "entry": {
+      "light_entity": "light.example_entry",
+      "preset_entity": "select.example_entry_preset",
+      "off": "Off",
+      "blue": "Blue breathe",
+      "red": "Red blink"
+    }
+  }
+}

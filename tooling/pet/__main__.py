@@ -6,7 +6,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from .replay import read_config, read_events, replay
+from .replay import parse_json, read_config, read_events, replay
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -25,34 +25,48 @@ def external_output(value, inputs):
     return path
 
 
-def write_report(path, report):
+def write_text(path, content):
     descriptor, temporary = tempfile.mkstemp(prefix=".pet-replay-", suffix=".tmp", dir=path.parent)
     try:
         with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as stream:
-            json.dump(report, stream, indent=2, sort_keys=True, allow_nan=False)
-            stream.write("\n")
+            stream.write(content)
         Path(temporary).replace(path)
     finally:
         Path(temporary).unlink(missing_ok=True)
 
 
 def main(argv=None):
-    parser = Parser(description="Replay private pet advisory evidence without contacting devices.")
+    parser = Parser(description="Prepare private pet advisories without contacting devices.")
     commands = parser.add_subparsers(dest="command", required=True)
     command = commands.add_parser("replay")
     command.add_argument("--config", required=True)
     command.add_argument("--events", required=True)
     command.add_argument("--output", required=True)
+    command = commands.add_parser("package")
+    command.add_argument("--config", required=True)
+    command.add_argument("--bindings", required=True)
+    command.add_argument("--output", required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == "package":
+            import yaml
+            from .package import build_package
+            output = external_output(args.output, [args.config, args.bindings])
+            bindings = Path(args.bindings)
+            if bindings.stat().st_size > 1024 * 1024:
+                raise ValueError("Bindings too large")
+            package = build_package(read_config(args.config), parse_json(bindings.read_text(encoding="utf-8")))
+            write_text(output, yaml.safe_dump(package, sort_keys=False, allow_unicode=True))
+            print("Private package generated with outputs disabled. No actions were delivered.")
+            return 0
         output = external_output(args.output, [args.config, args.events])
         report = replay(read_config(args.config), read_events(args.events))
-        write_report(output, report)
+        write_text(output, json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + "\n")
         count = sum(len(row["intents"]) for row in report["snapshots"])
         print(f"Replayed {len(report['snapshots'])} events; {count} advisory intents. No actions were delivered. Keep the report private.")
         return 0
     except (ValueError, OSError, UnicodeError, TypeError, KeyError, RecursionError):
-        print("Pet replay failed: invalid input or inaccessible private output. Input data is not echoed.", file=sys.stderr)
+        print("Pet preparation failed: invalid input or inaccessible private output. Input data is not echoed.", file=sys.stderr)
         return 1
 
 

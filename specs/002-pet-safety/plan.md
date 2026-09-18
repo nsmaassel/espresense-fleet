@@ -54,11 +54,11 @@ by green tests alone. Notification delivery and real collar performance remain u
 
 ## Validation
 
-Configuration and ingress validation pass their targeted synthetic tests and independent
-review. This first delivery establishes inputs and the complete feature plan. Domain
-engine/replay and HA runtime/package delivery remain separate work. A local WSL
-Python 3.14.2 / HA 2026.9.2 runtime initializes successfully in disposable storage;
-that is test-harness evidence, not validation of the unfinished integration.
+Configuration, ingress and domain/replay validation passed their targeted synthetic
+tests and independent review. Adapter/package tests use an isolated local Linux
+Python 3.14.2 / HA 2026.9.2 environment with disposable storage. MQTT I/O and external
+output services are stubbed; HA package merging, startup, storage, entities, services,
+scripts and automations are real. CI pins the same runtime.
 
 
 ### Domain/replay delivery evidence
@@ -70,4 +70,29 @@ failures and now pass; the reviewer independently verified all 47 pet tests with
 remaining required findings. CLI replay includes latch, acknowledgement, restart,
 missing freshness and eventual stable recovery. Input filtering uses the same camera-ID
 contract as the engine. These prove software behavior only; HA adapter/package/runtime
-and physical acceptance remain outstanding. Principles I–VII remain satisfied.
+and physical acceptance remained outstanding at that checkpoint. Principles I–VII
+remain satisfied.
+
+### Adapter/package review decisions
+
+Generated outputs recheck enablement before each action, including after an awaited
+light turn-on. This closes an independently reproduced race where disabling outputs
+could leave a later preset call running. Output bindings also require healthy storage
+and processing. The adapter publishes health before light entities so a failed save
+cannot race a state-triggered output. Recovery of storage reconciles current light
+intent; notification retry coalesces to the current severity. Private notification
+scripts receive bounded camera/event references for snapshot/clip resolution, without
+public credentials, network locations or media. No media fetching occurs here.
+
+Corrupt incident storage must be distinguished from a genuine first run, including
+HA-quarantined files on later restarts. Queue delay must never make expired evidence
+current or permit recovery. These are explicit boundary cases in the pinned-runtime
+suite, alongside orderly shutdown, retained data, overflow and failed persistence.
+
+Final independent review approved all five axes with no required findings remaining.
+The reviewer independently ran all 131 ordinary tests and 17 actual HA runtime tests,
+plus repository governance and whitespace checks. The reviewed fixes cover corrupt
+JSON and a subsequent quarantine-only restart, action guards during disable/save
+failure, and queue-delayed observations/camera frames. Principles I–VII pass the final
+review: software is reusable and configurable, public fixtures remain fictional,
+and physical measurements, output delivery and activation remain explicitly unchecked.

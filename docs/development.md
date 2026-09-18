@@ -18,8 +18,8 @@ pwsh -File .specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTas
 ```
 
 The output identifies the selected directory. Read those files before editing.
-`003-spec-kit-governance` covers this workflow; `002` is reserved for the future
-pet-safety stage. Clear the override before starting a new feature:
+`003-spec-kit-governance` covers this workflow; `002-pet-safety` covers the advisory
+integration and package. Clear the override before starting a new feature:
 
 ```powershell
 Remove-Item Env:SPECIFY_FEATURE, Env:SPECIFY_FEATURE_DIRECTORY -ErrorAction SilentlyContinue
