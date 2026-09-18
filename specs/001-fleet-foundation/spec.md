@@ -1,6 +1,6 @@
 # Spec 001 — Fleet foundation
 
-**Status:** US1/US2 software implemented in draft PRs; hardware acceptance pending · **Created:** 2026-09-17
+**Status:** US1/US2 software merged; US3 implemented in spec 004; hardware acceptance pending · **Created:** 2026-09-17
 **Target:** M5Stack AtomS3 Lite fleets, with operator-supplied inventory and geometry.
 
 ## Problem
@@ -72,7 +72,7 @@ Replacing ESPresense Companion's locator; generic HA dashboards; supporting boar
 ## Open questions
 
 - Linux/macOS Wi-Fi join for the provisioning step (nmcli / networksetup) — needed before others can use US1 outside Windows.
-- Whether `fleet` becomes one CLI (`python -m fleet …`) or stays as scripts; decide at US3.
+- US3 uses `python -m tooling.fleet diff|apply`; see [spec 004](../004-fleet-reconcile/spec.md).
 - Companion export now includes both `floors:` and `nodes:` from the geometry source (US2).
 
 ## Log

@@ -1,7 +1,7 @@
 # Foundation tasks
 
 Requirement IDs refer to this feature's spec. Completed items describe the software
-in the draft foundation/layout PRs, not a finished physical deployment.
+in the merged foundation/layout PRs, not a finished physical deployment.
 
 ## Software recovery (this delivery)
 
@@ -23,7 +23,9 @@ in the draft foundation/layout PRs, not a finished physical deployment.
 
 These require expanded requirements and a reviewed plan before implementation.
 
-- [ ] T011 US3: fleet diff/apply with explicit desired config.
+- [x] T011 US3: fleet diff/apply with explicit desired config; implemented and validated under [spec 004](../004-fleet-reconcile/tasks.md).
 - [ ] T012 US4: record and score calibration walks.
 - [ ] T013 US5: coverage survey.
 - [ ] T014 US6: separate pet-safety spec and Home Assistant package.
+
+Physical acceptance is tracked in [issue #7](https://github.com/nsmaassel/espresense-fleet/issues/7); private deployment records stay outside this repository.
