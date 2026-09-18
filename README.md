@@ -28,7 +28,7 @@ By hand:
 5. Configure the board LED and verify a fresh MQTT report using the runbook.
 6. Follow the [layout guide](docs/layout.md) to build an offline editor and export Companion YAML.
 7. Use the [fleet guide](docs/fleet.md) to inspect managed settings against your private inventory before explicitly applying changes.
-8. Follow the [calibration guide](docs/calibration.md) to replay saved walk and radio diagnostics.
+8. Follow the [calibration guide](docs/calibration.md) to record a timed walk and replay room and radio diagnostics.
 
 The example broker `192.0.2.20` is a documentation-only address; replace it with your broker.
 
@@ -42,8 +42,7 @@ The example broker `192.0.2.20` is a documentation-only address; replace it with
 | Offline floor-plan editor and Companion export | Available; geometry is supplied by an operator or agent |
 | Phone enrollment | Documented manual procedure |
 | Fleet settings diff/apply | Available with preview by default and stored-settings readback; [fleet guide](docs/fleet.md) |
-| Offline walk scoring and coverage survey | Available with explicit missing-data and capture-completeness reporting; [calibration guide](docs/calibration.md) |
-| Live MQTT walk capture | Next delivery of spec 005 |
+| Walk capture, scoring and coverage survey | Available with explicit missing-data and capture-completeness reporting; [calibration guide](docs/calibration.md) |
 | Home Assistant pet-safety package | Future spec; no safety guarantee from presence alone |
 
 ## Keep your home private

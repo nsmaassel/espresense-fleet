@@ -44,12 +44,21 @@ happy-path arithmetic.
 
 ## Validation evidence
 
-Offline CLI replay and scoring tests pass, including ties, missing windows,
-wrong-room plateaus, same-room boundaries, retained observations, incomplete
-captures and malformed input without echoing data. Independent five-axis review
-found no remaining issues in these modules. All seven constitutional principles
-remain satisfied; public fixtures are fictional and outputs remain private.
+Offline tests exercise actual CLI replay, deterministic summaries, missing windows,
+ties, wrong-room plateaus, same-room stop boundaries, retained observations, strict
+capture metadata and malformed input without echoing data. Transport tests cover
+subscription readiness, disconnects, shutdown deadlines and arbitrary millisecond
+durations. Independent five-axis review found two P2 issues: concurrent destination
+overwrite and completed-duration rounding. Both were reproduced, fixed and covered
+by regressions; the reviewer verified the fixes with no remaining production-code
+findings.
 
-This PR delivers normalized contracts, scoring, survey summaries and offline CLI.
-Live capture and transport tests follow in a separate PR. Physical walk and mounting
-acceptance remain deferred under issue #7.
+A read-only 32-second live MQTT smoke recorded fresh Wi-Fi telemetry and directional
+self-beacon observations and successfully replayed them through coverage scoring.
+All live configuration and evidence remained outside this public repository. No
+target-device walk was performed, and this does not validate placement or coverage.
+
+Constitution principles I–VII still pass: explicit commands, human physical steps,
+configuration-driven replay, fictional public fixtures, measured software evidence,
+fleet-only scope and no accuracy guarantee. Physical walk and mounting acceptance
+remain deferred under issue #7. Final test totals and CI are recorded in the PRs.

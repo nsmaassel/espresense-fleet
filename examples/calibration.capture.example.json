@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "device_alias": "example-phone",
+  "node_map": {
+    "fictional-a": "node01",
+    "fictional-b": "node02",
+    "fictional-c": "node03"
+  }
+}
