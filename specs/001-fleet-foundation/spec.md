@@ -1,6 +1,6 @@
 # Spec 001 — Fleet foundation
 
-**Status:** US1/US2 software merged; US3 implemented in spec 004; hardware acceptance pending · **Created:** 2026-09-17
+**Status:** US1/US2 software merged; US3 implemented in spec 004; US4/US5 implemented in spec 005; hardware acceptance pending · **Created:** 2026-09-17
 **Target:** M5Stack AtomS3 Lite fleets, with operator-supplied inventory and geometry.
 
 ## Problem
@@ -40,15 +40,19 @@ As an operator, I run `fleet diff` and see every node whose live settings differ
 never sends a checkbox key for `false`; prints a table; exit code non-zero on drift.
 
 ### US4 — Calibration as a procedure (P2)
-As an operator, I run `fleet calibrate --device <id> --stops "kitchen,office,kitchen"`, walk,
-and get a report: per-window winner, clean flips vs false flips, per-node minimum distance,
-and a recommendation (move node / adjust `rx_adj_rssi` bounds).
-**Acceptance:** report reproducible from a saved log; flags a node that never hears the device
-below 3 m; output suitable for pasting into an issue.
+As an operator, I use `python -m tooling.calibration capture` with a private alias map
+and timed stop schedule, walk, and replay the log using `score`. The report shows
+per-window winners, clean transitions, stationary false flips, missing evidence
+and per-node minimum distances. It identifies placement/calibration review heuristics
+without automatically changing signed RSSI adjustments.
+**Acceptance:** report reproducible from a saved log; flags a node with samples but
+none below 3 m. Logs and reports remain private. See [spec 005](../005-calibration-evidence/spec.md).
 
 ### US5 — Coverage survey (P3)
 As an operator, before mounting I get a table of Wi-Fi RSSI per node position and node-to-node
 BLE distance, with warnings for < −70 dBm Wi-Fi and nodes within 2 m of a router.
+Router separation comes from operator measurements; BLE estimates are directional
+diagnostics, not measured physical geometry. Implemented by `coverage` in spec 005.
 
 ### US6 — Pet-safety package (P2, separate spec 002)
 Door-zone node + door contact + camera event → latched, tiered alert with cool-downs; status

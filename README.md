@@ -28,6 +28,7 @@ By hand:
 5. Configure the board LED and verify a fresh MQTT report using the runbook.
 6. Follow the [layout guide](docs/layout.md) to build an offline editor and export Companion YAML.
 7. Use the [fleet guide](docs/fleet.md) to inspect managed settings against your private inventory before explicitly applying changes.
+8. Follow the [calibration guide](docs/calibration.md) to replay saved walk and radio diagnostics.
 
 The example broker `192.0.2.20` is a documentation-only address; replace it with your broker.
 
@@ -39,9 +40,10 @@ The example broker `192.0.2.20` is a documentation-only address; replace it with
 | First-time Wi-Fi/MQTT provisioning | Windows script; manual Wi-Fi join on Linux/macOS |
 | Read/change settings over the LAN | Available; preserves masked stored passwords |
 | Offline floor-plan editor and Companion export | Available; geometry is supplied by an operator or agent |
-| Phone enrollment and calibration walk | Documented manual procedure |
+| Phone enrollment | Documented manual procedure |
 | Fleet settings diff/apply | Available with preview by default and stored-settings readback; [fleet guide](docs/fleet.md) |
-| Automatic walk scoring and coverage survey | Planned in [spec 001](specs/001-fleet-foundation/spec.md) |
+| Offline walk scoring and coverage survey | Available with explicit missing-data and capture-completeness reporting; [calibration guide](docs/calibration.md) |
+| Live MQTT walk capture | Next delivery of spec 005 |
 | Home Assistant pet-safety package | Future spec; no safety guarantee from presence alone |
 
 ## Keep your home private
