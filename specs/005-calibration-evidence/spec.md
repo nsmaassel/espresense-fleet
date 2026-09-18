@@ -1,6 +1,6 @@
 # Spec 005: Calibration and coverage evidence
 
-**Status:** Offline scoring implemented and reviewed; live capture follows in a separate PR. Physical walks remain deferred.
+**Status:** Software implemented and independently reviewed; CI validation is the merge gate. Physical walks remain deferred.
 **Tracks:** Issue #6; foundation US4/US5.
 
 ## User stories

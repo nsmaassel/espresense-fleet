@@ -2,15 +2,14 @@
 
 Use this diagnostic after mounting, provisioning and enrolling the target device.
 The operator supplies a timed stationary-stop schedule and performs the walk.
-This delivery scores normalized observations from saved logs. Live recording is
-the next delivery.
+The software records normalized MQTT observations and scores the recorded route.
 It never changes node settings, calibration RSSI, optimizer bounds or placement.
 This is a nearest-node diagnostic, not ESPresense Companion's position estimator.
 
 ## Offline rehearsal
 
 Python 3.11+ is enough for replay; no broker or optional packages are needed.
-Both example files are invented documentation fixtures, never household data.
+All three example files are invented documentation fixtures, never household data.
 The example deliberately includes ties, missing observations and wrong winners.
 Choose a private output directory **outside this checkout** and create it first:
 
@@ -28,13 +27,18 @@ nonzero. A partial capture with a valid footer can be replayed, but stays explic
 
 ## Prepare the walk
 
-Copy the schedule example into private storage. Map each node
+Copy the schedule and capture-config examples into private storage. Map each node
 to a short alias, then map that alias to a room in the schedule. Labels may use
 lowercase letters, digits, underscores and hyphens, start with a letter, and have
 at most 48 characters. Use neutral aliases where possible. Raw addresses,
 credential-shaped strings and `irk` prefixes are rejected. Even minimized logs,
 aliases, schedules and reports remain private: room names and timing can identify
 a household. Keep credentials outside every repository; never paste them into chat.
+
+`node_map` maps each actual MQTT node slug to a unique output alias. It must cover
+exactly the nodes in the schedule. `device_alias` is the friendly ID assigned during
+enrollment, such as the fictional `example-phone`; it is never an IRK or MAC.
+The capture config is private and is never embedded in the log or report.
 
 Schedule fields:
 
@@ -46,23 +50,64 @@ Schedule fields:
 | `stops` | 1–200 ordered nonoverlapping `{room,start_ms,end_ms}` intervals |
 | `router_separation_m` | Optional alias-to-measured-distance map; omit unmeasured nodes |
 
-Times are integer milliseconds from the recorded start, between 0 and 3600000.
+Times are integer milliseconds from the capture start cue, between 0 and 3600000.
 Stops must have positive duration and a room with a mapped node. Gaps are walking;
 their device samples do not belong to a stationary window. At most 10000 windows
 are accepted. Router separation is the operator's separately measured distance to
 the nearest relevant Wi-Fi router/AP, from 0–1000m. It is never estimated from RSSI.
 The example measurements are fictional; replace them or omit the field.
 
-For the example schedule, stand at room01 before starting. At recorded time zero remain
+For the example schedule, stand at room01 before starting. At the start cue remain
 there for 20 seconds, walk for 5 seconds, remain at room02 for 20 seconds, walk for
 5 seconds, then remain at room01 for 20 seconds. Adjust this schedule to an honest
 record of the route. Actual pairing, mounting and walking require the operator.
 
-## Capture delivery
+## Capture
 
-This delivery provides offline `score` and `coverage` commands. Bounded live MQTT
-capture and its transport tests are the next delivery of spec 005. The normalized
-contract below already supports completeness metadata for replay.
+Install the optional transport dependency in your chosen Python environment:
+
+```powershell
+python -m pip install -r requirements-capture.txt
+```
+
+Set `ESPRESENSE_MQTT_HOST` in the human's local terminal. Optional environment
+variables are `ESPRESENSE_MQTT_PORT` (default 1883), `ESPRESENSE_MQTT_USERNAME`,
+`ESPRESENSE_MQTT_PASSWORD` and `ESPRESENSE_MQTT_TLS=1`. TLS uses the platform trust
+store and hostname verification; choose the broker's TLS port explicitly. There
+are no password CLI arguments. Supply credentials through the operator's secure
+environment mechanism, not command history, agent tools, tracked files or chat.
+
+```powershell
+python -m tooling.calibration capture --config <private-directory>/capture.json --schedule <private-directory>/schedule.json --duration-ms 70000 --output <private-directory>/walk.jsonl
+```
+
+Wait for **"Capture ready: elapsed time zero starts now"** before starting the stop
+timer. This cue appears once, only after all subscriptions are acknowledged.
+Connection/subscription setup is excluded from elapsed capture time. Capture must
+be long enough for the final scheduled stop. The log uses receiver monotonic time,
+not wall-clock time or a value guessed from the incoming payload.
+
+The subscription set contains only exact target-device/node, mapped directional
+self-beacon/node and mapped Wi-Fi telemetry topics. The client only subscribes;
+it publishes no messages. Capture has a 10-second connection/subscription budget,
+up to one hour of observation, and an outer process deadline of the requested
+duration plus 12 seconds (with up to two extra seconds to terminate a stuck worker).
+This also bounds DNS and third-party shutdown stalls. Automatic reconnect is off:
+a disconnect produces incomplete evidence. The implementation uses Paho MQTT
+**2.1.0**, callback API VERSION2, synchronous `connect`, a controlled `loop`, and
+`disconnect`; these APIs are described in the
+[official Paho client reference](https://eclipse.dev/paho/files/paho.mqtt.python/html/client.html).
+
+A capture is written to `<output>.partial` and published only after its footer passes
+validation. Finalization uses an atomic no-overwrite hard link in the same directory;
+unsupported filesystems leave the partial file and report failure. Existing output
+or partial files are never overwritten, including output created during capture. A handled
+transport failure yields a final log with `complete: false` and a nonzero exit.
+A killed worker, failed startup or storage error may leave only a `.partial` file
+or no file; never promote it to completed evidence. Choose a new filename for a
+retry and preserve any diagnostic partial file privately. Readable exception output
+does not include broker addresses, payloads, topics or credentials. File permissions
+and directory access controls are inherited from the operator's private storage.
 
 ## JSONL contract
 
@@ -84,14 +129,14 @@ coverage. `source` is `mqtt` or `synthetic`. Observation timestamps are nondecre
 integers in `[0,duration_ms)`. Distance is finite 0–10000m; RSSI is finite -200–0dBm.
 `rssi_dbm` is optional for device observations and required for Wi-Fi observations.
 A directional record means **node receives peer** and cannot refer to itself.
-Replay accepts only those normalized fields and rejects extras. The capture
-contract requires dropping incoming name, MAC, IP, topic, raw device ID,
-advertisement interval and unrelated payload fields before persistence.
+Replay accepts only those normalized fields and rejects extras. Capture drops
+incoming name, MAC, IP, topic, raw device ID, advertisement interval and unrelated
+payload fields before persistence.
 Malformed approved payloads are counted as `invalid`; other topics as `ignored`.
 Neither count is silently turned into evidence of reception.
 
 Replay observations may also contain boolean `retained`; true excludes the entire
-observation and adds to the retained count. The live capture contract excludes retained messages
+observation and adds to the retained count. Live capture excludes retained messages
 before writing records. Footer `records` counts serialized observations, including
 any retained observations supplied in a replay file. Footer `retained` counts
 messages excluded before serialization, so these counts do not overlap.
