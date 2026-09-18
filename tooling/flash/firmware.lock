@@ -1,0 +1,26 @@
+# Pinned firmware per target. Bump via PR; verify sha256 after download.
+# ESPresense release .bin files are the APP partition only; bootloader/partitions/boot_app0
+# come from an immutable ESPresense.com commit (the web flasher assets).
+# Verified against v4.0.6/partitions_singleapp.csv: OTA data 0xe000; app0 0x10000, size 0x1e0000.
+# All four downloads and SHA256 values verified on 2026-09-18; app size 1173296 bytes.
+targets:
+  atoms3-lite:
+    chip: esp32s3
+    espresense_version: v4.0.6
+    parts:
+      - name: bootloader
+        offset: "0x0"
+        url: https://raw.githubusercontent.com/ESPresense/ESPresense.com/a5ec35d4607c7fc5344e0337162644fbad8cf3f1/public/static/esp32s3/bootloader.bin
+        sha256: 9523133009292de040eb6ff60ce283c53a97f7e79e4fa1454232b12abbc088f8
+      - name: partitions
+        offset: "0x8000"
+        url: https://raw.githubusercontent.com/ESPresense/ESPresense.com/a5ec35d4607c7fc5344e0337162644fbad8cf3f1/public/static/esp32s3/partitions.bin
+        sha256: 75ad18c4b7f172345f99cdd626411b2365e39e8592c602fccdb3f52b74f486b8
+      - name: boot_app0
+        offset: "0xe000"
+        url: https://raw.githubusercontent.com/ESPresense/ESPresense.com/a5ec35d4607c7fc5344e0337162644fbad8cf3f1/public/static/boot_app0.bin
+        sha256: f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0
+      - name: app
+        offset: "0x10000"
+        url: https://github.com/ESPresense/ESPresense/releases/download/v4.0.6/esp32s3-cdc.bin
+        sha256: 23ff0840c6382e84e569c371cce4b9cbdbdeb5cdab79b94f1345eaf72f6d0be8
