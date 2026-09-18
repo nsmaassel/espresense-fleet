@@ -24,7 +24,7 @@ By hand:
 4. Provision from Windows PowerShell:
    `pwsh -File tooling/provision/Setup-ESPresenseNode.ps1 -ApSsid espresense-xxxxxx -RoomName kitchen -HomeSsid MyWifi -MqttHost 192.0.2.20`
 5. Configure the board LED and verify a fresh MQTT report using the runbook.
-6. Continue with the stacked offline layout editor change to place nodes and export Companion YAML.
+6. Follow the [layout guide](docs/layout.md) to build an offline editor and export Companion YAML.
 
 The example broker `192.0.2.20` is a documentation-only address; replace it with your broker.
 
@@ -35,7 +35,7 @@ The example broker `192.0.2.20` is a documentation-only address; replace it with
 | Flash four firmware partitions with SHA-256 verification | Available; AtomS3 Lite target |
 | First-time Wi-Fi/MQTT provisioning | Windows script; manual Wi-Fi join on Linux/macOS |
 | Read/change settings over the LAN | Available; preserves masked stored passwords |
-| Offline floor-plan editor and Companion export | In the stacked layout change; geometry supplied by an operator or agent |
+| Offline floor-plan editor and Companion export | Available; geometry is supplied by an operator or agent |
 | Phone enrollment and calibration walk | Documented manual procedure |
 | Fleet drift detection, automatic walk scoring, coverage survey | Planned in [spec 001](specs/001-fleet-foundation/spec.md) |
 | Home Assistant pet-safety package | Future spec; no safety guarantee from presence alone |

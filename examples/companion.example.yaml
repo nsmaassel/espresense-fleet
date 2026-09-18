@@ -1,0 +1,82 @@
+floors:
+- id: ground
+  name: Ground floor
+  bounds:
+  - - 0
+    - 0
+    - 0
+  - - 10
+    - 8
+    - 3
+  rooms:
+  - id: entry
+    name: Entry
+    points:
+    - - 0
+      - 0
+    - - 4
+      - 0
+    - - 4
+      - 8
+    - - 0
+      - 8
+  - id: living
+    name: Living
+    points:
+    - - 4
+      - 0
+    - - 10
+      - 0
+    - - 10
+      - 8
+    - - 4
+      - 8
+- id: upper
+  name: Upper floor
+  bounds:
+  - - 0
+    - 0
+    - 3
+  - - 10
+    - 8
+    - 6
+  rooms:
+  - id: studio
+    name: Studio
+    points:
+    - - 0
+      - 0
+    - - 6
+      - 0
+    - - 6
+      - 4
+    - - 0
+      - 4
+nodes:
+- id: entry
+  name: Entry
+  point:
+  - 1
+  - 1
+  - 0.5
+  floors:
+  - ground
+  room: entry
+- id: living
+  name: Living
+  point:
+  - 8
+  - 6
+  - 1.2
+  floors:
+  - ground
+  room: living
+- id: studio
+  name: Studio
+  point:
+  - 1
+  - 2
+  - 4.2
+  floors:
+  - upper
+  room: studio
