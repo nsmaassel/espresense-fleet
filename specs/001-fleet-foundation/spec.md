@@ -1,15 +1,15 @@
 # Spec 001 — Fleet foundation
 
-**Status:** Draft · **Created:** 2026-09-17 · **Owner:** Nick Maassel
-**Reference deployment:** 9× M5Stack AtomS3 Lite, two floors, broker on the LAN, Home Assistant on a separate host (see the private homelab repo).
+**Status:** US1/US2 software implemented in draft PRs; hardware acceptance pending · **Created:** 2026-09-17
+**Target:** M5Stack AtomS3 Lite fleets, with operator-supplied inventory and geometry.
 
 ## Problem
 
 Setting up ESPresense today is a series of one-off manual steps: a browser flasher, a captive
 portal per node, hand-drawn room polygons in YAML, and calibration by staring at numbers. It
 does not scale past two or three nodes, it is not reproducible, and it cannot be handed to
-someone else — or to an agent. We want a fleet of nine nodes across two houses, we want to
-redo it when we move, and we want a stranger with a coding agent to be able to do the same.
+someone else — or to an agent. Operators need to reproduce a fleet at another site and
+hand the same workflow to someone using a coding agent.
 
 ## Users
 
@@ -56,13 +56,14 @@ lights per door. Parameterized by beacon id, doors, nodes, camera zones, notify 
 
 ## Requirements
 
-- **R1** Tooling is Python 3.11+ (esptool, stdlib) plus one PowerShell script for the Windows
+- **FR-001**: Tooling is Python 3.11+ (esptool, stdlib) plus one PowerShell script for the Windows
   Wi-Fi join; a shell equivalent for Linux/macOS is a follow-up.
-- **R2** Firmware is pinned in `tooling/flash/firmware.lock` (URL + sha256 for app, bootloader,
+- **FR-002**: Firmware is pinned in `tooling/flash/firmware.lock` (URL + sha256 for app, bootloader,
   partitions, boot_app0) per target; bumping is a PR.
-- **R3** No tool reads private config by content from this repo; paths come from arguments.
-- **R4** All node writes go through the documented HTTP API; no serial after provisioning.
-- **R5** Every command prints what it will do and a "done" check an agent can parse.
+- **FR-003**: Private configuration is supplied by external paths and arguments; public examples are fictional.
+- **FR-004**: All node settings writes go through the documented HTTP API; no serial after provisioning.
+- **FR-005**: Every operational command documents its effect and a completion check an agent can parse.
+- **FR-006**: Offline layout editing preserves geometry and metadata on export and emits Companion floors and nodes.
 
 ## Non-goals
 
@@ -72,10 +73,10 @@ Replacing ESPresense Companion's locator; generic HA dashboards; supporting boar
 
 - Linux/macOS Wi-Fi join for the provisioning step (nmcli / networksetup) — needed before others can use US1 outside Windows.
 - Whether `fleet` becomes one CLI (`python -m fleet …`) or stays as scripts; decide at US3.
-- Companion alignment aid: should the editor also emit `floors:` (rooms) so geometry never lives in Python? Probably yes, in US2 follow-up.
+- Companion export now includes both `floors:` and `nodes:` from the geometry source (US2).
 
 ## Log
 
-- 2026-09-17 — Drafted from the reference run: two nodes flashed/provisioned, phone enrolled, walk test passed, layout editor v2 confirmed positions for nine nodes.
+- 2026-09-17 — Drafted from an operator-assisted setup. Deployment observations stay in the operator's private records.
 
 - 2026-09-18 — Resumed interrupted scaffold. Constitution 1.0.1 corrects the unsupported universal room/map accuracy claim; site calibration remains mandatory. US1/US2 software is the initial delivery, with hardware acceptance explicitly pending.

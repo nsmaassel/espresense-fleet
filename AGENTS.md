@@ -4,6 +4,22 @@ You are setting up BLE room presence in someone's home. The person does the phys
 steps (plugging boards in, walking around, typing their Wi-Fi password); you do
 everything else. Read [`docs/runbook.md`](docs/runbook.md) once before the first node.
 
+## Development entry point
+
+Before changing code or writing a spec, read this file,
+[the constitution](.specify/memory/constitution.md), and the active feature's
+`spec.md`, `plan.md`, and `tasks.md`. State which feature you are working on and
+which artifacts are missing. Follow [the development workflow](docs/development.md)
+for feature selection, Constitution Checks, requirement/task traceability, and validation.
+A workspace-level session must explicitly read these project files when routing here.
+
+Use fictional public fixtures. Keep real deployment configuration in the operator's
+private repository or ignored local directory, and credentials outside every git repository.
+Review changes against all seven constitutional principles before implementation and
+again before delivery. Run the governance check and applicable tests; report remaining
+physical validation separately. Spec Kit assists the review; passing scripts alone does
+not establish constitutional compliance or prove that content contains no private data.
+
 ## Hard rules
 
 1. **Never handle the Wi-Fi password.** `Setup-ESPresenseNode.ps1` prompts for it locally
@@ -65,6 +81,5 @@ Work through these in order; each step's "done" check is what you report back.
 
 - Spec Kit: `.specify/memory/constitution.md` (principles), `specs/` (features). Follow the
   constitution when adding scope; propose a spec before building a stage that doesn't exist.
-- The reference run this repo was written from: nine AtomS3 Lites, two floors, Home
-  Assistant on a separate host, broker on the LAN. If your user's setup differs, say so
-  early and adapt the flow rather than forcing it.
+- Adapt fleet size, floor count, broker, and Home Assistant placement to the operator's
+  setup. Keep deployment-specific details in their private configuration.

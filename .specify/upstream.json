@@ -1,0 +1,116 @@
+{
+  "hashes_describe": "Original generated upstream bytes before documented repository adaptations",
+  "project": "https://github.com/github/spec-kit",
+  "files": [
+    {
+      "path": ".specify/scripts/powershell/check-prerequisites.ps1",
+      "sha256": "851b3eb02593e7cf3dca97c4bb5f518e321b1f5fbe5865529d663b5fddd1e62b"
+    },
+    {
+      "path": ".specify/scripts/powershell/common.ps1",
+      "sha256": "5127db8f0b58305ea40dd14d3fc3745ea36b0d655bb59420c87127545fa04d6d"
+    },
+    {
+      "path": ".specify/scripts/powershell/create-new-feature.ps1",
+      "sha256": "24b07de9e1084ebe11f3dc65466d279b0aa4dbff7e7b011dcf303d299e994c9d"
+    },
+    {
+      "path": ".specify/scripts/powershell/setup-plan.ps1",
+      "sha256": "c4421bd2544a3b25fa07858f1c7cb854ef56a26a972853302e9763107da023cd"
+    },
+    {
+      "path": ".specify/scripts/powershell/setup-tasks.ps1",
+      "sha256": "76f14accb3782530bc0b813374e2363334c3ad2969c208b57613521591879fff"
+    },
+    {
+      "path": ".specify/templates/checklist-template.md",
+      "sha256": "c37695297e5d3153d64f82c21223509940b13932046c7961c42d1d669516130c"
+    },
+    {
+      "path": ".specify/templates/constitution-template.md",
+      "sha256": "ce7549540fa45543cca797a150201d868e64495fdff39dc38246fb17bd4024b3"
+    },
+    {
+      "path": ".specify/templates/plan-template.md",
+      "sha256": "cc7f7979cf8d8836ec26492785affd80791d3422a2b745062ec695be8c985ef7"
+    },
+    {
+      "path": ".specify/templates/spec-template.md",
+      "sha256": "3945437fc35cd30a5b2bf7beea680337c3516826d3efa5a6b92c4a7eca1ba28e"
+    },
+    {
+      "path": ".specify/templates/tasks-template.md",
+      "sha256": "fc29a233f6f5a27ca31f1aa46b596af6500c627441c6e62b2bc4a1d721525842"
+    },
+    {
+      "path": ".agents/skills/speckit-analyze/SKILL.md",
+      "sha256": "2740b8aeab8d0104527384ca74106e252e0a20df89355c8f36be25a62130d6d6"
+    },
+    {
+      "path": ".agents/skills/speckit-checklist/SKILL.md",
+      "sha256": "29d47cc5fe24045094c77f9a659c79192dbb3063fd752827973712e83ce7a897"
+    },
+    {
+      "path": ".agents/skills/speckit-clarify/SKILL.md",
+      "sha256": "2c184d847f288f9308593764c799978c81238ff61e223e66ebbcac5264e3b45c"
+    },
+    {
+      "path": ".agents/skills/speckit-constitution/SKILL.md",
+      "sha256": "e2cbe859958c5a05be52a44d63821e6a84d39f3d37acc05b550cc7ad85da0dab"
+    },
+    {
+      "path": ".agents/skills/speckit-implement/SKILL.md",
+      "sha256": "80db51bc215ce505ff38cc0fdf02ae37fe6edf19e4b82e0af142dc211c74a6a5"
+    },
+    {
+      "path": ".agents/skills/speckit-plan/SKILL.md",
+      "sha256": "b92428f869e93676fc0b77232dd4fecb610294b68bee677d940a239c43766a3d"
+    },
+    {
+      "path": ".agents/skills/speckit-specify/SKILL.md",
+      "sha256": "e74c7b705bebbdf457d0b01e928a4d4f25bd3f77b8c650a2ef3c463e706550ec"
+    },
+    {
+      "path": ".agents/skills/speckit-tasks/SKILL.md",
+      "sha256": "4b9a311eb67978010b6fdc5321ec563e787d212be5f22a3e9beb3c99b0e070fa"
+    },
+    {
+      "path": ".claude/skills/speckit-analyze/SKILL.md",
+      "sha256": "adb9c4baed1d0e27cebd08e506a7247c1357ee721b6ea340201553d5792e6c8a"
+    },
+    {
+      "path": ".claude/skills/speckit-checklist/SKILL.md",
+      "sha256": "82a54d9ce969ae87c0034ffce77539bc708290efc26a6160efe928b248c712c4"
+    },
+    {
+      "path": ".claude/skills/speckit-clarify/SKILL.md",
+      "sha256": "fd720c2b468f10f89cf4b6dfcff876e735e557cde5f9bcb2ec1fc7079c19051c"
+    },
+    {
+      "path": ".claude/skills/speckit-constitution/SKILL.md",
+      "sha256": "c1a044aba243ca6aff627fb5e4404feb6f1108d4f7dd174631bee3ae477d6c15"
+    },
+    {
+      "path": ".claude/skills/speckit-implement/SKILL.md",
+      "sha256": "97a339450a2a81cb63d17cac84e8fdca6be07f0e66c37bcdca6ee87cf1f8d9f2"
+    },
+    {
+      "path": ".claude/skills/speckit-plan/SKILL.md",
+      "sha256": "08e693951151193ea45fe4a42079c520e223999eb803e10a89190e070f089949"
+    },
+    {
+      "path": ".claude/skills/speckit-specify/SKILL.md",
+      "sha256": "bafe529c22cb971cd2537ca6c5381ba100de0f91f439c62941a2c541fa067f7e"
+    },
+    {
+      "path": ".claude/skills/speckit-tasks/SKILL.md",
+      "sha256": "84c276f7037693ebc69eef74dce0af127280eda1d8e6af18d29ff8440b028d3f"
+    }
+  ],
+  "version": "0.9.5",
+  "commit": "2262359d967601f864749e359d3e0129e45e94f4",
+  "generation": [
+    "specify init codex --integration codex --integration-options=--skills --script ps --no-git --ignore-agent-tools",
+    "specify init claude --integration claude --script ps --no-git --ignore-agent-tools"
+  ]
+}

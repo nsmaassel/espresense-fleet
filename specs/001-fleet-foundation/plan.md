@@ -2,8 +2,26 @@
 
 Recovered from the approved September 17 setup session. The user selected a public
 `espresense-fleet` repository, reusable onboarding/tools, an offline layout editor,
-and private House 1 configuration in homelab. This delivery completes US1/US2 tooling;
+and household configuration in a separate private repository. This delivery completes US1/US2 tooling;
 US3–US6 remain future work rather than implied live features.
+
+## Constitution Check
+
+Reviewed against constitution 1.0.1 during the Spec Kit adoption. This records the
+current design review, not a claim that the original scaffold ran the CLI gates.
+
+| Principle | Design and evidence | Status |
+|---|---|---|
+| I. Agent and human operation | Commands and runbook completion checks; FR-001, FR-005. | Software covered; hardware acceptance pending. |
+| II. Human physical steps | Operator plugs in boards and enters secrets locally; FR-004. | Preserved. |
+| III. Configuration as code | Pinned firmware; geometry is the layout source; FR-002, FR-006. | Foundation covered; fleet reconciliation is deferred US3. |
+| IV. Public/private separation | Fictional examples and external config paths; FR-003. | Reviewed; deployment records stay private. |
+| V. Recorded evidence | Offline and browser tests below; physical calibration needs site records. | Software verified; site validation pending. |
+| VI. Scope | US1/US2 deliver flashing, provisioning and layout only. | In scope; future stories remain unchecked. |
+| VII. Accuracy honesty | No universal BLE accuracy guarantee; measure after mounting. | Preserved. |
+
+Recheck these entries after design changes and before implementation review. A
+passing structural check does not establish semantic compliance with the constitution.
 
 ## Boundaries
 

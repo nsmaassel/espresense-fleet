@@ -4,9 +4,11 @@ Reproducible setup for [ESPresense](https://espresense.com) Bluetooth presence n
 flash firmware, provision Wi-Fi and MQTT, and place nodes on a floor plan for
 [ESPresense Companion](https://espresense.com/companion).
 
-**Pre-alpha.** This first release packages a two-node AtomS3 Lite setup into reusable
-tools. A nine-node installation is planned; full-house coverage and pet alerts are
-not validated. BLE distances are estimates, and room accuracy needs testing in each home.
+**Pre-alpha.** This first release provides reusable AtomS3 Lite setup tools.
+Fleet size and placement depend on the installation. Full-house coverage and pet
+alerts are not validated. BLE distances are estimates, and room accuracy needs testing in each home.
+
+Development follows [the constitution and Spec Kit workflow](docs/development.md).
 
 ## Start here
 

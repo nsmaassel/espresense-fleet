@@ -1,24 +1,29 @@
 # Foundation tasks
 
+Requirement IDs refer to this feature's spec. Completed items describe the software
+in the draft foundation/layout PRs, not a finished physical deployment.
+
 ## Software recovery (this delivery)
 
-- [x] Recover and review the interrupted scaffold without household data in public files.
-- [x] Validate firmware checksums and make HTTP settings changes preserve existing config.
-- [x] Provide offline geometry editing and Companion export with round-trip tests.
-- [x] Add fictional inventory and layout examples, installation steps and CI.
-- [x] Preserve accepted House 1 positions and inventory in the private homelab repository.
+- [x] T001 [FR-003] Recover and review the scaffold without household data in public files.
+- [x] T002 [FR-001, FR-002, FR-004] Validate firmware checksums and preserve existing HTTP settings.
+- [x] T003 [FR-006] Provide offline geometry editing and Companion export with round-trip tests.
+- [x] T004 [FR-001, FR-003, FR-005] Add fictional examples, installation steps, runbook completion checks and CI.
+- [x] T005 [FR-003] Keep accepted deployment geometry and inventory in the operator's private repository.
 
 ## Hardware acceptance (requires physical setup)
 
-- [ ] Run the recovered flash and provisioning tools on an unprovisioned board.
-- [ ] Label and inventory the remaining seven boards; confirm each room assignment.
-- [ ] Verify Wi-Fi/MQTT at each outlet before mounting.
-- [ ] Confirm upstairs alignment and room names; mark exterior doors and router position.
-- [ ] Deploy Companion for House 1 and record a calibration walk across both floors.
+- [ ] T006 [FR-001, FR-002, FR-004, FR-005] Run the recovered flash and provisioning tools on an unprovisioned board.
+- [ ] T007 [FR-003] Label remaining boards and confirm each room assignment in private inventory.
+- [ ] T008 [FR-005] Verify Wi-Fi/MQTT at each outlet before mounting; retain results privately.
+- [ ] T009 [FR-003, FR-006] Confirm floor alignment and room names; mark doors and router positions privately.
+- [ ] T010 [FR-003, FR-006] Deploy Companion and record a private calibration walk.
 
 ## Later stories
 
-- [ ] US3: fleet diff/apply with explicit desired config.
-- [ ] US4: record and score calibration walks.
-- [ ] US5: coverage survey.
-- [ ] US6: separate pet-safety spec and Home Assistant package.
+These require expanded requirements and a reviewed plan before implementation.
+
+- [ ] T011 US3: fleet diff/apply with explicit desired config.
+- [ ] T012 US4: record and score calibration walks.
+- [ ] T013 US5: coverage survey.
+- [ ] T014 US6: separate pet-safety spec and Home Assistant package.
