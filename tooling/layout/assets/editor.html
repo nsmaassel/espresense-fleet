@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ESPresense · Layout editor</title><style>/* EDITOR_CSS */</style></head>
+<body>
+<header><p class="eyebrow">ESPresense / Fleet tools</p><h1>Place your nodes.</h1>
+<p>Align your floors, then move each node to its outlet. All coordinates are in metres.</p>
+<p class="hint">Offline workspace · Your plans stay in this browser. Placement is a starting point; validate tracking with a walk test.</p></header>
+<main>
+<section class="toolbar" aria-label="Source and exports">
+<label class="file">Import geometry.yaml<input id="import" type="file" accept=".yaml,.yml,.json"></label>
+<button id="geometry">Download geometry.yaml</button><button id="companion">Download Companion YAML</button><button id="copy">Copy Companion YAML</button>
+<label><input id="persist" type="checkbox"> Save draft in this browser</label><button id="reset">Reset to imported source</button>
+</section>
+<p id="status" role="status" aria-live="polite">Ready. Select a node to adjust its height.</p>
+<p class="hint">Drag a dot or focus it and use arrow keys: 5 cm per step, Shift for 25 cm. Height is relative to that floor.</p>
+<div id="floors"></div>
+<section class="output"><h2>Companion configuration</h2><p>Copy these <code>floors</code> and <code>nodes</code> into your private Companion configuration. Download geometry.yaml to keep editing later.</p>
+<textarea id="yaml" readonly aria-label="Companion YAML output" spellcheck="false"></textarea></section>
+</main><footer>No account, server, or network connection required.</footer>
+<script>/* YAML_LIBRARY */</script>
+<script>const initial = "PAYLOAD_JSON";</script>
+<script>/* MODEL_JS */</script><script>/* EDITOR_JS */</script>
+</body></html>

@@ -1,0 +1,23 @@
+# Entirely fictional dimensions and positions. Metres, with bottom-left origin.
+bounds: [[0, 0], [10, 8]]
+floors:
+  - id: ground
+    name: Ground floor
+    z: [0, 3]
+    local: {w: 10, h: 8}
+    place: {flip_h: false, flip_v: false, dx: 0, dy: 0}
+    rooms:
+      entry: [[0, 0], [4, 0], [4, 8], [0, 8]]
+      living: [[4, 0], [10, 0], [10, 8], [4, 8]]
+    nodes:
+      entry: [1, 1, 0.5]
+      living: [8, 6, 1.2]
+  - id: upper
+    name: Upper floor
+    z: [3, 6]
+    local: {w: 6, h: 4}
+    place: {flip_h: false, flip_v: false, dx: 0, dy: 0}
+    rooms:
+      studio: [[0, 0], [6, 0], [6, 4], [0, 4]]
+    nodes:
+      studio: [1, 2, 1.2]
