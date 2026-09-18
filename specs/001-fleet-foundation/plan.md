@@ -4,7 +4,8 @@ Recovered from the approved September 17 setup session. The user selected a publ
 `espresense-fleet` repository, reusable onboarding/tools, an offline layout editor,
 and household configuration in a separate private repository. This delivery completes US1/US2 tooling;
 US3 is delivered separately by [spec 004](../004-fleet-reconcile/plan.md).
-US4–US6 remain future work rather than implied live features.
+US4/US5 software is delivered by [spec 005](../005-calibration-evidence/plan.md).
+US6 and physical validation remain future work.
 
 ## Constitution Check
 
@@ -15,7 +16,7 @@ current design review, not a claim that the original scaffold ran the CLI gates.
 |---|---|---|
 | I. Agent and human operation | Commands and runbook completion checks; FR-001, FR-005. | Software covered; hardware acceptance pending. |
 | II. Human physical steps | Operator plugs in boards and enters secrets locally; FR-004. | Preserved. |
-| III. Configuration as code | Pinned firmware; geometry is the layout source; FR-002, FR-006. | Foundation covered; fleet reconciliation is deferred US3. |
+| III. Configuration as code | Pinned firmware; geometry is the layout source; FR-002, FR-006. | Foundation covered; fleet reconciliation is implemented in spec 004. |
 | IV. Public/private separation | Fictional examples and external config paths; FR-003. | Reviewed; deployment records stay private. |
 | V. Recorded evidence | Offline and browser tests below; physical calibration needs site records. | Software verified; site validation pending. |
 | VI. Scope | US1/US2 deliver flashing, provisioning and layout only. | In scope; future stories remain unchecked. |
