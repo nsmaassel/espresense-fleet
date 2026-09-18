@@ -44,7 +44,7 @@ The example broker `192.0.2.20` is a documentation-only address; replace it with
 | Fleet settings diff/apply | Available with preview by default and stored-settings readback; [fleet guide](docs/fleet.md) |
 | Walk capture, scoring and coverage survey | Available with explicit missing-data and capture-completeness reporting; [calibration guide](docs/calibration.md) |
 | Pet advisory model and offline replay | Available for synthetic scenarios; [guide](docs/pet-safety.md) |
-| Home Assistant pet-safety package | Adapter/package in development under [spec 002](specs/002-pet-safety/spec.md); no safety guarantee from presence alone |
+| Home Assistant pet advisory integration/package | Available with outputs disabled by default; [installation and acceptance guide](docs/pet-safety.md); physical acceptance required |
 
 ## Keep your home private
 
@@ -57,6 +57,9 @@ plans and coordinates; treat them as private too. The editor runs offline.
 ## Development
 
 Run `python -m unittest discover -s tests -v` after installing requirements.
+HA runtime tests use Linux Python 3.14.2 and `requirements-ha-test.txt`:
+`python -m unittest discover -s tests_ha -v`. They stub MQTT and external actions;
+no household broker, light or notification channel is contacted.
 See [the implementation plan](specs/001-fleet-foundation/plan.md) for scope and
 [the task list](specs/001-fleet-foundation/tasks.md) for hardware checks still needed.
 

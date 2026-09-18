@@ -70,3 +70,16 @@ jobs:
       - run: node tests/test_layout_browser.cjs
         env:
           NODE_PATH: /tmp/espresense-browser/node_modules
+  home-assistant-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14.2'
+          cache: pip
+          cache-dependency-path: requirements-ha-test.txt
+      - run: python -m pip install -r requirements-ha-test.txt
+      - name: Validate the real Home Assistant integration and generated package
+        run: python -m unittest discover -s tests_ha -v
