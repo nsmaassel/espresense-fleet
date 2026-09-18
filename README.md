@@ -1,0 +1,58 @@
+# espresense-fleet
+
+Reproducible setup for [ESPresense](https://espresense.com) Bluetooth presence nodes:
+flash firmware, provision Wi-Fi and MQTT, and place nodes on a floor plan for
+[ESPresense Companion](https://espresense.com/companion).
+
+**Pre-alpha.** This first release packages a two-node AtomS3 Lite setup into reusable
+tools. A nine-node installation is planned; full-house coverage and pet alerts are
+not validated. BLE distances are estimates, and room accuracy needs testing in each home.
+
+## Start here
+
+With a coding agent, open this repository and describe your boards, MQTT broker,
+and floor-plan images. The agent follows [AGENTS.md](AGENTS.md); you connect boards,
+enter credentials locally, pair your phone, and walk the calibration route.
+
+By hand:
+
+1. Create a Python 3.11+ virtual environment and run `python -m pip install -r requirements.txt`.
+2. Read the [setup runbook](docs/runbook.md). Confirm your broker is reachable from the node Wi-Fi.
+3. Flash a connected AtomS3 Lite:
+   `python tooling/flash/flash_node.py --port COM6 --watch`
+   (use `/dev/ttyACM0` on Linux).
+4. Provision from Windows PowerShell:
+   `pwsh -File tooling/provision/Setup-ESPresenseNode.ps1 -ApSsid espresense-xxxxxx -RoomName kitchen -HomeSsid MyWifi -MqttHost 192.0.2.20`
+5. Configure the board LED and verify a fresh MQTT report using the runbook.
+6. Continue with the stacked offline layout editor change to place nodes and export Companion YAML.
+
+The example broker `192.0.2.20` is a documentation-only address; replace it with your broker.
+
+## Available and planned
+
+| Capability | Status |
+| --- | --- |
+| Flash four firmware partitions with SHA-256 verification | Available; AtomS3 Lite target |
+| First-time Wi-Fi/MQTT provisioning | Windows script; manual Wi-Fi join on Linux/macOS |
+| Read/change settings over the LAN | Available; preserves masked stored passwords |
+| Offline floor-plan editor and Companion export | In the stacked layout change; geometry supplied by an operator or agent |
+| Phone enrollment and calibration walk | Documented manual procedure |
+| Fleet drift detection, automatic walk scoring, coverage survey | Planned in [spec 001](specs/001-fleet-foundation/spec.md) |
+| Home Assistant pet-safety package | Future spec; no safety guarantee from presence alone |
+
+## Keep your home private
+
+This public repository contains software and fictional examples. Keep real node
+addresses, Wi-Fi names, floor plans, and inventory in a private repository or in
+ignored `private/`. Enrollment IRKs and passwords are credentials: keep them out
+of git, including private git repositories. Generated editor pages embed floor
+plans and coordinates; treat them as private too. The editor runs offline.
+
+## Development
+
+Run `python -m unittest discover -s tests -v` after installing requirements.
+See [the implementation plan](specs/001-fleet-foundation/plan.md) for scope and
+[the task list](specs/001-fleet-foundation/tasks.md) for hardware checks still needed.
+
+Firmware pins live in `tooling/flash/firmware.lock`; update them through review.
+Examples use invented homes and documentation-only addresses. MIT licensed.

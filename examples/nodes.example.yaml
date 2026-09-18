@@ -1,0 +1,19 @@
+# Fictional inventory. IDs are physical labels, not room names.
+# Credentials and enrollment IRKs belong in a separate secret store.
+site: example-home
+broker:
+  host: 192.0.2.20
+  port: 1883
+nodes:
+  - id: node01
+    target: atoms3-lite
+    mac: null  # Record the observed hardware MAC in your PRIVATE inventory.
+    address: 192.0.2.31
+    room: kitchen
+    status: planned
+  - id: node02
+    target: atoms3-lite
+    mac: null
+    address: 192.0.2.32
+    room: study
+    status: planned

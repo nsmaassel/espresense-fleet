@@ -1,0 +1,12 @@
+# Household configuration and generated pages stay private.
+/private/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+/node_modules/
+/artifacts/
+/layout-editor.html
