@@ -4,7 +4,7 @@
 
 Vendor the eight core workflow skills separately for Codex and Claude, sharing the
 PowerShell 7 scripts and templates from pinned GitHub Spec Kit v0.9.5 (FR-002).
-Add a concise development entry point and one workflow guide (FR-001). Preserve
+Add a concise routed agent entry point and one workflow guide (FR-001). Preserve
 constitution 1.0.1. Add explicit per-principle review and task mapping in templates
 and migrate existing feature artifacts (FR-003).
 
@@ -56,3 +56,23 @@ paths were corrected in the client adapters and recorded as local adaptations.
 Remaining limits: static privacy checks cannot classify arbitrary prose or geometry,
 and requirement links do not prove coverage quality. These still require review.
 CI runs on the pull request; the default branch receives the rules only after merge.
+
+## 2026-09-19 instruction audit
+
+The original entry point required the constitution plus `spec.md`, `plan.md`, and
+`tasks.md` before every code change or new specification. That inverted the Spec Kit
+sequence for a new feature and loaded setup detail into every agent session. The
+maintained design now routes work first: operators load the runbook, maintainers load
+an existing feature's artifacts, new capabilities create artifacts in sequence, and
+principle amendments use the constitution command separately (FR-001, FR-003).
+
+The public README treats specs as contributor context. The development guide records
+the installed v0.9.5 flow and warns against silently documenting commands from a newer
+upstream release before the vendored assets are upgraded. The constitution remains
+unchanged because this correction changes how existing governance is consumed, not
+the principles themselves.
+
+Validation: the repository governance check passed; 131 unit tests passed with two
+optional MQTT tests skipped because their extra dependency was not installed; the
+PowerShell Spec Kit smoke test passed feature creation, worktree discovery, missing
+artifact failures, existing-plan preservation, and explicit feature selection.

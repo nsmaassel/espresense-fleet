@@ -1,85 +1,49 @@
-# AGENTS.md — operating espresense-fleet for a human
+# AGENTS.md — operating and developing espresense-fleet
 
-You are setting up BLE room presence in someone's home. The person does the physical
-steps (plugging boards in, walking around, typing their Wi-Fi password); you do
-everything else. Read [`docs/runbook.md`](docs/runbook.md) once before the first node.
+This is a public toolkit for BLE room presence. A person handles physical actions
+and enters secrets locally; the agent operates the tooling, records evidence, and
+keeps deployment details outside this repository.
 
-## Development entry point
+## Route the work first
 
-Before changing code or writing a spec, read this file,
-[the constitution](.specify/memory/constitution.md), and the active feature's
-`spec.md`, `plan.md`, and `tasks.md`. State which feature you are working on and
-which artifacts are missing. Follow [the development workflow](docs/development.md)
-for feature selection, Constitution Checks, requirement/task traceability, and validation.
-A workspace-level session must explicitly read these project files when routing here.
+- **Set up or troubleshoot a fleet:** read [`docs/runbook.md`](docs/runbook.md),
+  then the relevant layout, fleet, calibration, or pet-safety guide. Follow each
+  guide's observable done checks. The runbook owns board-specific facts and the
+  end-to-end setup sequence.
+- **Maintain an existing capability:** find its owning directory under `specs/`
+  and read that feature's `spec.md`, `plan.md`, and `tasks.md` before changing its
+  behavior. Update those artifacts when requirements, design, status, or remaining
+  work changes. A correction that does not change intended behavior can stay local
+  to the affected code or documentation.
+- **Add a distinct capability or stage:** follow [`docs/development.md`](docs/development.md)
+  to run the installed Spec Kit flow and create a new numbered feature.
+- **Change project-wide principles:** use `speckit-constitution` as a separate,
+  reviewed governance change. Feature work consumes the constitution; it does not
+  recreate or casually amend it.
 
-Use fictional public fixtures. Keep real deployment configuration in the operator's
-private repository or ignored local directory, and credentials outside every git repository.
-Review changes against all seven constitutional principles before implementation and
-again before delivery. Run the governance check and applicable tests; report remaining
-physical validation separately. Spec Kit assists the review; passing scripts alone does
-not establish constitutional compliance or prove that content contains no private data.
+When no feature is selected, do not guess one from an old branch or local selector.
+Identify the owning feature from the requested behavior and current files, or create
+a new feature when the work is independently deliverable.
 
-## Hard rules
+## Public/private boundary
 
-1. **Never handle the Wi-Fi password.** `Setup-ESPresenseNode.ps1` prompts for it locally
-   in the human's terminal. Do not ask for it in chat, do not put it in a file.
-2. **Never commit private config to this repo.** MACs, IPs, SSIDs and room polygons of a real
-   house go to the human's private repo or `private/` (git-ignored). Passwords and `irk:`
-   enrollment keys stay outside every git repository, in a secret store. Treat an IRK
-   as a tracking credential.
-3. **A provisioned node must not stay plugged into a PC.** The host's serial driver can park
-   an ESP32-S3 in ROM download mode on plug-in (USB enumerates, no LED, no boot), and opening
-   the serial port resets a running node. Provision on the PC, then move it to a wall adapter.
-   Check running nodes over the LAN (`GET http://<ip>/wifi/main`), not over serial.
-4. **Ask before anything visible to others** (creating repos, posting issues, publishing).
+Use fictional public fixtures. Keep real MACs, IPs, SSIDs, room geometry, floor
+plans, broker details, captures, and generated reports in an operator's private
+repository or ignored local directory. Passwords and `irk:` enrollment keys stay
+outside every git repository and out of chat; prompt for them only in the person's
+local terminal. Treat an IRK as a tracking credential.
 
-## The flow
+Provisioned nodes run from ordinary power. A host USB serial driver can leave an
+ESP32-S3 in download mode, and opening its serial port can reset it. Use USB for
+flashing and provisioning, then verify a deployed node over the LAN and MQTT.
 
-Work through these in order; each step's "done" check is what you report back.
+## Development completion
 
-| # | Step | Tool | Done when |
-|---|---|---|---|
-| 1 | Inventory | ask: boards, broker host:port (anonymous?), HA present?, plan images? | `nodes.yaml` skeleton exists with one row per board |
-| 2 | Flash | `python tooling/flash/flash_node.py --port <COM/tty>` | serial boot log shows `Starting access point … SSID: 'espresense-xxxxxx'` |
-| 3 | Provision | `pwsh tooling/provision/Setup-ESPresenseNode.ps1 -ApSsid … -RoomName … -HomeSsid … -MqttHost … -MqttPort …` (human runs it — it prompts for the password) | status topic → `online` plus fresh telemetry from that node |
-| 4 | Hardware | `python tooling/provision/espresense_set.py <ip> hardware led_1_type=2 led_1_pin=35 led_1_cnt=1 led_1_cntrl=1` (AtomS3 Lite) | LED white = Wi-Fi + MQTT |
-| 5 | Layout | `docs/layout.md`: plan images → `geometry.yaml` → `python tooling/layout/build_layout_page.py geometry.yaml` → human drags dots → paste YAML | `nodes:` block with a point for every node |
-| 6 | Enroll a phone | `mosquitto_pub -t espresense/rooms/<room>/enroll/set -m 'example-phone|Example Phone'`, human pairs from the phone's Bluetooth settings | `espresense/settings/irk:…/config` published; restart nodes that already cached the phone under an `apple:` id |
-| 7 | Calibration walk | record `espresense/devices/<id>/+` while the human walks room→room→room, 20 s per stop; bucket into 5–10 s windows; report which node "won" each window | clean flip at each transition, no flips while stationary; note any node that never hears the device closer than ~3 m |
-| 8 | Hand off | write the private config: `nodes.yaml`, `companion/config.yaml` (floors + nodes), broker details; summarize gotchas hit | human can rerun every step from the private repo alone |
+Review applicable constitutional constraints before implementation and delivery.
+Run `python tooling/governance/check_repository.py`, applicable tests, and an
+in-agent code review. Report automated evidence separately from hardware or
+household validation. Passing scripts proves structure and known-pattern checks;
+it does not prove privacy, radio accuracy, or physical acceptance.
 
-## Facts you will otherwise rediscover the hard way
-
-- The GitHub release `.bin` (e.g. `esp32s3-cdc.bin`) is the **app partition only**. Flashing it
-  alone at `0x0` gives a silent board. `flash_node.py` writes bootloader `0x0`, partitions
-  `0x8000`, `boot_app0` `0xe000`, app `0x10000`, all pinned in `tooling/flash/firmware.lock`.
-- AtomS3 Lite uses the ESP32-S3's native USB-CDC → use the `-cdc` firmware variant.
-- Provisioning is `POST /wifi/main`, `application/x-www-form-urlencoded`, fields `room`,
-  `wifi-ssid`, `wifi-password`, `mqtt_host`, `mqtt_port`, … A **missing key** means "empty";
-  a checkbox is on only if its key is present — sending the string `False` turns it **on**.
-  The API returns stored passwords as `***###***` and keeps the stored value when that
-  placeholder is sent back, so later changes over the LAN need no password.
-- Generic ESP32-S3 builds default LED 1 to PWM on GPIO 2. AtomS3 Lite's LED is a WS2812 on
-  GPIO 35 (`led_1_type=2`, `led_1_pin=35`, `led_1_cnt=1`).
-- Status LED: red = joining Wi-Fi · pink = setup portal (Wi-Fi failed after 60 s; retries after
-  300 s) · yellow = Wi-Fi ok, no MQTT · white = both ok · green = updating.
-- Keep nodes **≥ 2 m from Wi-Fi routers/APs** — a node beside the router had −32 dBm Wi-Fi
-  and never heard a phone closer than 5 m.
-- iPhones cannot be a stand-in beacon via nRF Connect (no iBeacon, name stripped, stops in
-  background). Enroll them instead (step 6). Android can advertise a real iBeacon.
-- Enrollment keys are **retained MQTT messages on that broker**. Moving to another broker means
-  re-enrolling or republishing `espresense/settings/irk:<key>/config`.
-- Windows `netsh wlan show networks` is a stale cache; a node's setup AP can look present for
-  minutes after it has joined Wi-Fi.
-- ESPresense Companion estimates a position from several nodes. The upstream placement guide
-  recommends aiming for at least five fixes; validate signal overlap in each zone. Room and
-  coordinate accuracy depend on calibration, with no fixed error bound established here.
-  See https://espresense.com/companion/configuration/#node-placement.
-
-## Where things are
-
-- Spec Kit: `.specify/memory/constitution.md` (principles), `specs/` (features). Follow the
-  constitution when adding scope; propose a spec before building a stage that doesn't exist.
-- Adapt fleet size, floor count, broker, and Home Assistant placement to the operator's
-  setup. Keep deployment-specific details in their private configuration.
+Ask before creating a public repository, issue, pull request, or other externally
+visible artifact unless the current session already authorizes publication.
