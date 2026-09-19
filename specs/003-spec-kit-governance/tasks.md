@@ -7,3 +7,4 @@
 - [x] T005 Implement deterministic governance checks, secret scanning, CI and negative tests (FR-004, FR-005).
 - [x] T006 Test scripts in disposable repositories/worktrees, including failure cases and existing-plan preservation (FR-006).
 - [x] T007 Analyze artifacts, review public diff, run final checks and record evidence (FR-001, FR-002, FR-003, FR-004, FR-005, FR-006).
+- [x] T008 Audit the agent instruction hierarchy, route operator and contributor contexts, and correct constitution/artifact sequencing without amending project principles (FR-001, FR-003, FR-005).

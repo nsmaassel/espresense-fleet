@@ -8,8 +8,6 @@ flash firmware, provision Wi-Fi and MQTT, and place nodes on a floor plan for
 Fleet size and placement depend on the installation. Full-house coverage and pet
 alerts are not validated. BLE distances are estimates, and room accuracy needs testing in each home.
 
-Development follows [the constitution and Spec Kit workflow](docs/development.md).
-
 ## Start here
 
 With a coding agent, open this repository and describe your boards, MQTT broker,
@@ -60,8 +58,10 @@ Run `python -m unittest discover -s tests -v` after installing requirements.
 HA runtime tests use Linux Python 3.14.2 and `requirements-ha-test.txt`:
 `python -m unittest discover -s tests_ha -v`. They stub MQTT and external actions;
 no household broker, light or notification channel is contacted.
-See [the implementation plan](specs/001-fleet-foundation/plan.md) for scope and
-[the task list](specs/001-fleet-foundation/tasks.md) for hardware checks still needed.
+Contributors and coding agents should start with the
+[development workflow](docs/development.md). Feature artifacts under [`specs/`](specs/)
+record accepted behavior, design decisions, completed work, and remaining physical
+validation; they are contributor context rather than setup instructions.
 
 Firmware pins live in `tooling/flash/firmware.lock`; update them through review.
 Examples use invented homes and documentation-only addresses. MIT licensed.
