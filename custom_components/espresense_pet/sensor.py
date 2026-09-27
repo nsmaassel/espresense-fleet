@@ -1,5 +1,5 @@
-"""Diagnostic rooms, latched incident, health and per-door light intents."""
-from homeassistant.components.sensor import SensorEntity
+"""Diagnostic rooms, latched incident, health, per-door light intents and levels."""
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 
 from .coordinator import DOMAIN
 from .entity import PetEntity
@@ -7,13 +7,19 @@ from .entity import PetEntity
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     coordinator = hass.data[DOMAIN]
-    keys = ["room", "last_room", "alert", "health"] + [f"light_{door}" for door in coordinator.config["doors"]]
+    doors = coordinator.config["doors"]
+    keys = ["room", "last_room", "alert", "health"] + [f"light_{door}" for door in doors]
+    keys += [f"level_{door}" for door, definition in doors.items() if definition.get("levels")]
     async_add_entities([PetSensor(coordinator, key) for key in keys])
 
 
 class PetSensor(PetEntity, SensorEntity):
     def __init__(self, coordinator, key):
         super().__init__(coordinator, key, "sensor")
+        if key.startswith("level_"):
+            levels = coordinator.config["doors"][key[6:]]["levels"]
+            self._attr_device_class = SensorDeviceClass.ENUM
+            self._attr_options = ["escape", "unknown", "off", *(level["name"] for level in levels)]
 
     @property
     def native_value(self):
@@ -22,6 +28,8 @@ class PetSensor(PetEntity, SensorEntity):
             return state["alert"]["level"]
         if self.key.startswith("light_"):
             return state["doors"][self.key[6:]]["light"]
+        if self.key.startswith("level_"):
+            return state["doors"][self.key[6:]]["level"]
         return state[self.key]
 
     @property

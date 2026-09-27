@@ -126,6 +126,23 @@ class PetRuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.hass.states.get("binary_sensor.example_pet_near_entry").state, "on")
         self.assertEqual(self.hass.states.get("sensor.example_pet_health").attributes["storage_ok"], True)
 
+    async def test_level_sensor_follows_qualifying_observation_and_hold(self):
+        self.config["doors"]["entry"]["levels"] = [
+            {"name": "close", "hold_s": 5, "nodes": ["node_a"], "rssi_dbm": -60},
+            {"name": "near", "hold_s": 10, "nodes": ["node_a"], "rssi_dbm": -75}]
+        await self.start()
+        self.assertIsNone(self.hass.states.get("sensor.example_pet_level_internal"))
+        level = self.hass.states.get("sensor.example_pet_level_entry")
+        self.assertEqual(level.state, "off")
+        self.assertEqual(level.attributes["options"], ["escape", "unknown", "off", "close", "near"])
+        await self.observation(0)
+        self.assertEqual(self.hass.states.get("sensor.example_pet_level_entry").state, "close")
+        self.clock.now = 1005
+        self.coordinator.enqueue("advance", (), self.clock.monotonic())
+        await self.flush()
+        self.assertEqual(self.hass.states.get("sensor.example_pet_level_entry").state, "near")
+        self.assertEqual(self.hass.states.get("sensor.example_pet_light_entry").state, "blue")
+
     async def test_initially_disconnected_reconnect_duplicates_and_shutdown(self):
         self.initial_connected = False
         await self.start()
