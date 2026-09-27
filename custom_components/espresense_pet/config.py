@@ -40,6 +40,38 @@ def aliases(value, minimum, maximum):
     return value
 
 
+MAX_LEVELS = 6
+RESERVED_LEVELS = ("off", "escape", "unknown")
+
+
+def validate_levels(levels, nodes):
+    """Check one door's strongest-first level list against the configured nodes."""
+    if not isinstance(levels, list) or not 1 <= len(levels) <= MAX_LEVELS:
+        raise ValueError(f"Door levels need 1 to {MAX_LEVELS} entries")
+    rooms = {definition["room"] for definition in nodes.values()}
+    names = set()
+    for level in levels:
+        if isinstance(level, dict) and "room" in level:
+            fields(level, ("name", "hold_s", "room"))
+            if not isinstance(level["room"], str) or level["room"] not in rooms:
+                raise ValueError("Level room must be a configured node room")
+        else:
+            fields(level, ("name", "hold_s", "nodes", "rssi_dbm"))
+            members = level["nodes"]
+            if (not isinstance(members, list) or not members
+                    or any(not isinstance(node, str) or node not in nodes for node in members)
+                    or len(set(members)) != len(members)):
+                raise ValueError("Level nodes must be distinct configured nodes")
+            finite(level["rssi_dbm"], -200, 0)
+        name = alias(level["name"], identifier=True)
+        if name in names or name in RESERVED_LEVELS:
+            raise ValueError("Level names must be unique and not off, escape or unknown")
+        names.add(name)
+        # Capped so a stray reading cannot hold a level for long.
+        if finite(level["hold_s"], 0, 120) == 0:
+            raise ValueError("Level hold_s must be above 0 and at most 120 seconds")
+
+
 def validate_config(raw):
     fields(raw, ("schema", "pet_id", "name", "device_alias", "nodes", "doors"), ("timing", "frigate_topic"))
     if type(raw["schema"]) is not int or raw["schema"] != 1:
@@ -68,7 +100,7 @@ def validate_config(raw):
     for door, definition in normalized["doors"].items():
         alias(door, identifier=True)
         fields(definition, ("contact", "nodes", "exterior"),
-               ("near_rssi_dbm", "camera", "inside_zones", "outside_zones"))
+               ("near_rssi_dbm", "camera", "inside_zones", "outside_zones", "levels"))
         contact = definition["contact"]
         if not isinstance(contact, str) or not re.fullmatch(r"binary_sensor\.[a-z0-9_]{1,64}", contact):
             raise ValueError("Door contact must be a binary_sensor entity")
@@ -96,6 +128,8 @@ def validate_config(raw):
             alias(definition["camera"])
             if not inside and not outside:
                 raise ValueError("Camera mappings require at least one zone")
+        if "levels" in definition:
+            validate_levels(definition["levels"], nodes)
     timings = normalized.get("timing", {})
     fields(timings, (), DEFAULT_TIMING)
     normalized["timing"] = DEFAULT_TIMING | timings

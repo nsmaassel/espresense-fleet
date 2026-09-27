@@ -2,6 +2,7 @@
 
 **Status:** Software implementation authorized by the operator's instruction to continue locally; deployment and physical acceptance remain deferred.
 **Created:** 2026-09-18 · **Scope:** Foundation US6 · **Tracks:** issue #11.
+**Extended:** 2026-09-26 with graded per-door proximity levels (FR-015, FR-016).
 Recovered behavior is generalized from private planning; household mappings stay private.
 
 ## User scenarios and acceptance
@@ -10,6 +11,7 @@ Recovered behavior is generalized from private planning; household mappings stay
 2. As a household member, I want tiered door/camera advisories. Opening while near produces a heads-up; a cat camera observation after an opening can latch Suspected or Urgent. Correlation stays within one exterior door; internal doors only provide proximity.
 3. As an operator, I want latches to survive restart and acknowledgement. Only continuing fresh indoor observations clear and re-arm; outages preserve the latch and disclose unavailable evidence.
 4. As an operator with or without an agent, I want a reusable HA package and integration. Configuration adapts it to my home. Outputs start disabled. Synthetic runtime tests establish behavior; a real collar/door/camera exercise remains separate.
+5. As a household member, I want a door light with several proximity levels, not only near/not near. Each door may configure strongest-first levels; the light follows the strongest level whose evidence is still held and steps down as holds lapse. An escape latch outranks every level.
 
 ## Requirements
 
@@ -27,6 +29,8 @@ Recovered behavior is generalized from private planning; household mappings stay
 - **FR-012**: Use one state machine in HA and tests. Serialize MQTT/contact/tick/ack processing; persist incident transitions before output intents. Bound queues/collections and expose overflow as degraded evidence. Cancel subscriptions/timers/listeners on shutdown. Validate real HA 2026.9.2 lifecycle/schema alongside offline tests.
 - **FR-013**: Provide deterministic offline replay and fictional scenarios for boundaries, retained/stale data, cooldown, direct Urgent, internal doors, cross-door isolation, outages/reconnection, recovery gaps, duplicate camera updates, acknowledgement, restart and malformed inputs. Reports/packages require external paths and cannot overwrite input evidence.
 - **FR-014**: Document simulation and activation checks. Keep mounting, collar fitting, contact/camera mapping, notification delivery, WLED validation and activation unchecked. Tests establish software behavior, never pet-safety or room-accuracy guarantees.
+- **FR-015**: A door may configure an optional strongest-first list of 1 to 6 proximity levels. Each level has a unique entity-safe `name` (not `off`, `escape` or `unknown`), a finite `hold_s` above 0 and at most 120 seconds, and exactly one evidence source: distinct configured `nodes` (any configured node, not only the door's) with a finite `rssi_dbm` in [-200, 0], or a `room` that some configured node maps to. Reject unknown keys, mixed sources and invalid values. Doors without levels behave unchanged.
+- **FR-016**: While transport is connected, a received reading from a level node at or above its `rssi_dbm` (inclusive) marks that level's evidence at receipt time; a currently qualified room marks every matching room level. Each door reports `escape` while an incident affects it, otherwise `unknown` while transport is unavailable, otherwise the first configured level observed within its hold, otherwise `off`. Any connectivity change discards level evidence, and level evidence is never persisted or restored. Provide one enumerated HA sensor per door with levels; existing proximity and light-intent entities are unchanged. A level is advisory proximity, never containment.
 
 ## Assumptions and deliberate resolutions
 

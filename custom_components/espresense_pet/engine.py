@@ -6,6 +6,7 @@ import json
 import re
 
 from .config import fields, finite, validate_config
+from .levels import DoorLevels
 from .presence import Presence
 
 LEVELS = {"clear": 0, "suspected": 1, "urgent": 2}
@@ -25,6 +26,8 @@ class Engine:
         self.config = validate_config(config)
         self.timing = self.config["timing"]
         self.presence = Presence(self.config)
+        self.levels = {door: DoorLevels(definition.get("levels", []))
+                       for door, definition in self.config["doors"].items()}
         self._now = 0
         self.connected = False
         self.monitored_since = None
@@ -122,6 +125,8 @@ class Engine:
             self.connected = connected
             self.monitored_since = now if connected else None
             self.presence.disconnect()
+            for levels in self.levels.values():
+                levels.forget()
             self._reset_recovery()
             self.health_notified = False
         return self._evaluate(now)
@@ -137,6 +142,11 @@ class Engine:
         if not self.connected:
             return []
         room, evidence_at = self.presence.observe(node, distance_m, rssi_dbm_or_None, now)
+        current_room = self.presence.room(now)
+        for levels in self.levels.values():
+            levels.reading(node, rssi_dbm_or_None, now)
+            if current_room is not None:
+                levels.room(current_room, now)
         self.health_notified = False
         results = []
         if self.alert["level"] != "clear":
@@ -220,7 +230,13 @@ class Engine:
         for door in self.config["doors"]:
             near = self.presence.near(door, now) if self.connected else None
             light = "red" if door in self.alert["doors"] else "unknown" if near is None else "blue" if near else "off"
-            doors[door] = {"near": near, "light": light}
+            if door in self.alert["doors"]:
+                level = "escape"
+            elif not self.connected:
+                level = "unknown"
+            else:
+                level = self.levels[door].active(now) or "off"
+            doors[door] = {"near": near, "light": light, "level": level}
         return {"pet_id": self.config["pet_id"], "room": self.presence.room(now) if self.connected else None,
                 "last_room": self.presence.last_room(now), "recently_seen": last_seen is not None and now - last_seen <= self.timing["indoor_recent_s"],
                 "last_seen_age_s": now - last_seen if last_seen is not None else None,

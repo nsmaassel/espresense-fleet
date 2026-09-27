@@ -11,6 +11,7 @@ optional real-HA tests run on Linux Python 3.14.2 with HA pinned to 2026.9.2.
 
 Module ownership/seams:
 - `config.py`, `engine.py` and focused engine helpers: validated domain and state.
+  `levels.py` tracks per-door level evidence for the engine (FR-015, FR-016).
 - `ingress.py`: pinned ESPresense and Frigate payloads to domain events.
 - `__init__.py`, `coordinator.py`, sensor platforms: HA lifecycle, ordered dispatch,
   MQTT health, private Store persistence, services and entity publication.
@@ -96,3 +97,24 @@ JSON and a subsequent quarantine-only restart, action guards during disable/save
 failure, and queue-delayed observations/camera frames. Principles I–VII pass the final
 review: software is reusable and configurable, public fixtures remain fictional,
 and physical measurements, output delivery and activation remain explicitly unchecked.
+
+### Graded door levels (FR-015, FR-016)
+
+Levels extend per-door proximity without changing `near` or light intent. Level
+configuration is validated in `config.py` with the other door fields, so the package
+generator, replay and HA share one contract. `levels.py` holds only receipt-time
+evidence per level; the engine feeds it node readings and the currently qualified
+room after each connected observation, clears it on every connectivity change, and
+derives each door's level in `snapshot()`. Escape outranks every level and
+unavailable transport reports unknown, so a broker blip cannot revive an old level.
+Level evidence is intentionally absent from `dump()`: after restart or a failed-save
+rollback, levels restart empty rather than trusting stale radio evidence. The HA
+adapter adds one enumerated sensor per door with levels. Presets stay in operator
+automations, so the generated package is unchanged. Principles I–VII still pass:
+fictional fixtures only, bounded configuration, and levels are advisory proximity.
+
+Validation: `tests/test_pet_levels.py` covers each configuration rejection,
+strongest-wins, step-down, inclusive thresholds, room levels after the room hold,
+transport resets, escape precedence, doors without levels and non-persistence. The
+existing HA runtime suite asserts the level sensor and its change after a qualifying
+MQTT observation; it runs in the pinned Linux CI job.

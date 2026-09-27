@@ -127,15 +127,15 @@ class PetEngineTests(unittest.TestCase):
 
     def test_door_proximity_requires_local_rssi_and_light_is_not_safety(self):
         result = engine()
-        self.assertEqual(result.snapshot(0)["doors"]["entry"], {"near": None, "light": "unknown"})
+        self.assertEqual(result.snapshot(0)["doors"]["entry"], {"near": None, "light": "unknown", "level": "off"})
         result.observe("node_b", 5, -90, 0)
         self.assertIsNone(result.snapshot(0)["doors"]["entry"]["near"])
         result.observe("node_a", 2, None, 1)
         self.assertIsNone(result.snapshot(1)["doors"]["entry"]["near"])
         result.observe("node_a", 2, -66, 2)
-        self.assertEqual(result.snapshot(2)["doors"]["entry"], {"near": False, "light": "off"})
+        self.assertEqual(result.snapshot(2)["doors"]["entry"], {"near": False, "light": "off", "level": "off"})
         result.observe("node_a", 2, -65, 3)
-        self.assertEqual(result.snapshot(3)["doors"]["entry"], {"near": True, "light": "blue"})
+        self.assertEqual(result.snapshot(3)["doors"]["entry"], {"near": True, "light": "blue", "level": "off"})
 
     def test_exterior_heads_up_has_exact_cooldown_internal_door_does_not(self):
         config = example_config()

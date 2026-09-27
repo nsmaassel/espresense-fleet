@@ -38,6 +38,41 @@ Without a camera map the door can provide proximity and heads-up evidence but ca
 initiate a camera-correlated incident. Internal doors never initiate escape advisories.
 Names, maps, event histories and reports are private even when raw IDs are removed.
 
+### Door proximity levels
+
+A door may add an optional `levels` list to drive a light with several steps instead
+of only near or not near. List 1 to 6 levels, **strongest first**. Each level is one of:
+
+| Level form | Fields |
+|---|---|
+| Node reading | `name`, `hold_s`, `nodes` (distinct configured node aliases, any room), `rssi_dbm` (-200 to 0) |
+| Room | `name`, `hold_s`, `room` (a room some configured node maps to) |
+
+`name` uses lowercase letters, digits and underscores, is unique within the door and
+cannot be `off`, `escape` or `unknown`. `hold_s` is above 0 and at most 120 seconds.
+
+```json
+"entry": {
+  "contact": "binary_sensor.example_entry",
+  "nodes": ["node_a"],
+  "exterior": true,
+  "levels": [
+    {"name": "close", "hold_s": 5, "nodes": ["node_a"], "rssi_dbm": -60},
+    {"name": "near", "hold_s": 15, "nodes": ["node_a", "node_b"], "rssi_dbm": -75},
+    {"name": "next_room", "hold_s": 30, "room": "room_b"}
+  ]
+}
+```
+
+A received reading at or above a level's `rssi_dbm` from one of its nodes marks that
+level. The currently qualified room (after the room hold) marks matching room levels.
+The door reports the first listed level marked within its `hold_s`, stepping down as
+holds lapse, otherwise `off`. An incident affecting the door reports `escape`; while
+MQTT is unavailable it reports `unknown`. Level evidence is dropped whenever the
+connection changes and is not kept across restarts. Doors without `levels` expose no
+level sensor. Map levels to light presets in your own automations; the generated
+package does not bind them.
+
 ## Evidence rules
 
 Only fresh finite observations from mapped indoor nodes count. Retained and malformed
@@ -164,6 +199,7 @@ For `pet_id: example_pet`, generated identifiers include:
 | `sensor.example_pet_alert` | `clear`, `suspected`, `urgent`; acknowledged and affected-door attributes |
 | `sensor.example_pet_health` | Radio/transport state plus `storage_ok`, `processing_ok`, `overflow` attributes |
 | `sensor.example_pet_light_entry` | Diagnostic `red`, `blue`, `off`, `unknown` intent |
+| `sensor.example_pet_level_entry` | Only for doors with `levels`: `escape`, `unknown`, `off` or a level name |
 | `input_boolean.example_pet_outputs_enabled` | Enables the generated output bindings |
 | `script.example_pet_acknowledge` | Calls `espresense_pet.acknowledge`; never clears the latch |
 
